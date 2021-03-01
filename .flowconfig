@@ -1,0 +1,19 @@
+[ignore]
+<PROJECT_ROOT>/node_modules/webpack-cli
+<PROJECT_ROOT>/node_modules/npmi/node_modules/npm/node_modules/config-chain/test/broken.json
+<PROJECT_ROOT>/node_modules/npm/node_modules/config-chain/test/broken.json
+<PROJECT_ROOT>/node_modules/npmi/node_modules/npm/test/fixtures/config/package.json
+
+[include]
+
+[libs]
+flow-typed/npm/redux_v4.x.x.js
+
+[lints]
+
+[options]
+module.name_mapper='^~/\(.+\)$' -> '<PROJECT_ROOT>/app/scripts/\1'
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.scss

@@ -1,0 +1,18 @@
+
+
+// use react-miniui
+@import "../../../react-miniui/dist/miniui.css";
+@import "./theme.scss";
+
+.loading-bar {
+  height: 10px;
+  width: 100%;
+  border-radius: 4px;
+  background-color: #ddd;
+  overflow: hidden;
+
+  .bar {
+    height: 10px;
+    background-color: #007bff;
+  }
+}
