@@ -5,9 +5,9 @@ const webpack = require('webpack'); // webpack 插件
 const dotenv = require('dotenv').config();
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 抽离 css 文件，使用这个插件需要单独配置 JS 和 CSS 压缩
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin'); // 压缩 JS
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // 压缩 CSS
 const FileManagerPlugin = require('filemanager-webpack-plugin'); // webpack copy move delete mkdir archive
+const ArchiveWebpackPlugin = require('archive-webpack-plugin'); // archive
 
 console.log(path.resolve(__dirname, '~/'));
 console.log('NODE_ENV:', process.env.NODE_ENV);
@@ -17,11 +17,6 @@ const ASSET_PATH = process.env.ASSET_PATH || '/';
 const config = {
   optimization: { // 优化项
     minimizer: [ // 压缩优化
-      new UglifyJsPlugin({
-        cache: true, // 缓存
-        parallel: true, // 并发打包
-        sourceMap: true // set to true if you want JS source maps
-      }),
       new OptimizeCSSAssetsPlugin()
     ]
   },
@@ -129,13 +124,10 @@ const plugins = [ // 数组，放着所有 webpack 插件
   new MiniCssExtractPlugin({
     filename: '[name].min.css'
   }),
-  new FileManagerPlugin({
-    onEnd: {
-      copy: [{
-        source: path.resolve(__dirname, 'favicon.ico'),
-        destination: path.resolve(__dirname, 'dist/')
-      }]
-    }
+  new ArchiveWebpackPlugin({
+    source: 'dist/',
+    destination: 'static.tar',
+    format: 'tar'
   })
 ]
 
@@ -170,9 +162,10 @@ if (process.env.NODE_ENV === 'production') {
     collapseWhitespace: true
   }
   // 源码映射，生成一个映射文件，帮我们定位源码文件
-  config.devtool = 'none';
+  config.devtool = 'source-map';
 } else {
   config.devServer = devServer;
+  config.devtool = 'source-map';
 }
 
 plugins.push(new HtmlWebpackPlugin(htmlWebpackPluginConfig));
