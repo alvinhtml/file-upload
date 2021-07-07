@@ -18,6 +18,19 @@ app.use(cors({
   }
 }));
 
+
+// 创建多级目录
+function mkdirsSync(dirname) {
+  if (fs.existsSync(dirname)) {
+    return true;
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      return true;
+    }
+  }
+}
+
 // 上传文件
 const uploadFile = ctx => {
   // 获取上传文件
@@ -37,15 +50,20 @@ const uploadFile = ctx => {
   // console.log("filePath", filePath);
   console.log("fileResource", fileResource);
 
+  console.log("filePath", filePath);
+  console.log("fs.existsSync(filePath)", fs.existsSync(filePath));
+
   if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(filePath);
-    const writeStream = fs.createWriteStream(fileResource);
-    try {
-      fileReader.pipe(writeStream);
-      ctx.status = 201
-      ctx.body = {url: fileResource};
-    } catch (err) {
-      ctx.throw(500, err);
+    // 如果成功创建了目录
+    if (mkdirsSync(filePath)) {
+      const writeStream = fs.createWriteStream(fileResource);
+      try {
+        fileReader.pipe(writeStream);
+        ctx.status = 201
+        ctx.body = {url: fileResource};
+      } catch (err) {
+        ctx.throw(500, err);
+      }
     }
   } else {
     const writeStream = fs.createWriteStream(fileResource);
@@ -66,7 +84,8 @@ const makefile = async ctx => {
     return new Promise((resolved, rejected) => {
       const total = parseInt(ctx.params.total, 10);
       const filePath = path.join(__dirname, `/static/uploads/${ctx.params.md5}`);
-      const fileResource = filePath + '.tar';
+      console.log("ctx", ctx);
+      const fileResource = path.join(__dirname, `/static/uploads/${ctx.query.filename}`);
       const writeStream = fs.createWriteStream(fileResource);
       const chunks = Array.from(new Array(total), (v, i) => i);
 

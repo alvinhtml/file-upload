@@ -98,7 +98,7 @@ export default class FileUpload extends Component {
         uploading: false,
         pushing: true
       });
-      this.makefile(md5, fileChunks.length);
+      this.makefile(md5, fileChunks.length, file.name);
       return;
     }
 
@@ -151,7 +151,8 @@ export default class FileUpload extends Component {
       this.setState({
         progress: 100
       });
-      this.makefile(md5, fileChunks.length);
+      console.log("file", file);
+      this.makefile(md5, fileChunks.length, file.name);
     });
   }
 
@@ -196,8 +197,8 @@ export default class FileUpload extends Component {
     });
   }
 
-  makefile(md5, chunkTotal) {
-    fetch(`http://localhost:8007/api/makefile/${md5}/${chunkTotal}`, {
+  makefile(md5, chunkTotal, filename) {
+    fetch(`http://localhost:8007/api/makefile/${md5}/${chunkTotal}?filename=${filename}`, {
       method: 'POST',
       mode: 'cors'
     }).then((response) => {

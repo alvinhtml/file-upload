@@ -22,8 +22,10 @@
 npm run start
 ```
 
-后端使 NodeJS 提供上传文件的 API 接口。
+后端使用 NodeJS 提供上传文件的 API 接口。
 
 ```bash
 npm run testServe
 ```
+
+后端接口的访问地址是 `http://localhost:8007`
