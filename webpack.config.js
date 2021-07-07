@@ -123,11 +123,6 @@ const plugins = [ // 数组，放着所有 webpack 插件
   }),
   new MiniCssExtractPlugin({
     filename: '[name].min.css'
-  }),
-  new ArchiveWebpackPlugin({
-    source: 'dist/',
-    destination: 'static.tar',
-    format: 'tar'
   })
 ]
 
@@ -140,7 +135,7 @@ const devServer = {
   hot: true,
   proxy: {
     '/api': {
-      target: process.env.API_SERVER_URL,
+      target: 'http://localhost:8007',
       //changeOrigin 的意思就是把 http 请求中的 Origin 字段进行变换，在浏览器接收到后端回复的时候，浏览器会以为这是本地请求，而在后端那边会以为是在站内的调用。
       changeOrigin: true,
     }
